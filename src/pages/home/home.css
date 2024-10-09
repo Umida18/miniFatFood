@@ -1,0 +1,20 @@
+.customStyleModalI .ant-modal-content {
+  padding: 0px !important;
+}
+.categoryContainer {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  /* height: 160px !important; */
+  overflow-x: scroll;
+}
+@media (max-width: 768px) {
+  .categoryContainer {
+    font-size: 8px;
+    padding-inline: 12px;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    justify-content: flex-start !important;
+    overflow-x: scroll;
+    margin-left: 20px;
+  }
+}
