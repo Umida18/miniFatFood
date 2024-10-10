@@ -10,7 +10,7 @@ import {
   UploadFile,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 const customStyleModal = css`
   .custom-modal .ant-modal-content {
@@ -45,10 +45,10 @@ const DrawerCategory: React.FC<TypeProps> = ({
   setPreviewUrl,
   setFileList,
 }) => {
-  const [previewImage, setPreviewImage] = useState<string>("");
+  // const [previewImage, setPreviewImage] = useState<string>("");
 
   const removeImage = () => {
-    setPreviewImage("");
+    // setPreviewImage("");
     setPreviewUrl(null);
     setFileList([]);
     form.setFieldsValue({ image: undefined });

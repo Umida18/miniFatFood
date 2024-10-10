@@ -179,7 +179,7 @@ const CategoryPage = () => {
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (text: string, record: ICategory) => (
+      render: (_: string, record: ICategory) => (
         <img src={record.image} alt={record.name} style={{ width: 50 }} />
       ),
     },
@@ -191,7 +191,7 @@ const CategoryPage = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (text: string, record: ICategory): JSX.Element => (
+      render: (_: string, record: ICategory): JSX.Element => (
         <div className="flex gap-2">
           <Button
             onClick={() => deleteCategory(record.id)}
@@ -224,7 +224,7 @@ const CategoryPage = () => {
             rowKey="id"
             pagination={{
               pageSize: pageSize,
-              onShowSizeChange: (current, size) => setPageSize(size),
+              onShowSizeChange: (_, size) => setPageSize(size),
             }}
           />
         )}

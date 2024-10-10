@@ -159,7 +159,7 @@ const ProductPage = () => {
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (text: string, record: Product) => (
+      render: (_: string, record: Product) => (
         <img
           src={`/public/${record.image}`}
           alt={record.title}
@@ -229,7 +229,7 @@ const ProductPage = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (text: string, record: Product): JSX.Element => (
+      render: (_: string, record: Product): JSX.Element => (
         <div className="flex gap-2">
           <Button
             onClick={() => deleteProduct(record.id)}
@@ -265,7 +265,7 @@ const ProductPage = () => {
               rowKey="id"
               pagination={{
                 pageSize: pageSize,
-                onShowSizeChange: (current, size) => setPageSize(size),
+                onShowSizeChange: (_, size) => setPageSize(size),
               }}
             />
           )}

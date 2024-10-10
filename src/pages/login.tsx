@@ -18,7 +18,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IData[]>([]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const LoginPage = () => {
       return;
     }
 
-    setLoading(true);
+    // setLoading(true);
 
     try {
       const user = data.find(
@@ -57,7 +57,7 @@ const LoginPage = () => {
     } catch (error) {
       message.error("Произошла ошибка при входе");
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
   return (
