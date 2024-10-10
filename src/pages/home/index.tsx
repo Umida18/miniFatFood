@@ -14,6 +14,7 @@ import {
   Typography,
   Skeleton,
   Alert,
+  message,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { CgProfile } from "react-icons/cg";
@@ -97,12 +98,26 @@ export const HomePage = () => {
   }, [dispatch]);
 
   const [modalType, setModalType] = useState<"order" | "product" | null>(null);
+  const [nameOrder, setNameOrder] = useState<string>("");
+  const [phoneOrder, setPhoneOrder] = useState<string>("");
+  const [kvOrder, OrderKvOrder] = useState<string>("");
+  const [etajOrder, setEtajOrder] = useState<string>("");
+  const [dfOrder, setDfOrder] = useState<string>("");
 
   const openOrderModal = () => {
     setModalType("order");
     setIsModalOpen(true);
   };
-
+  const handleOrder = () => {
+    setIsModalOpen(false);
+    message.success("Ваш заказ принят");
+    setDeliveryType("");
+    setNameOrder("");
+    setPhoneOrder("");
+    OrderKvOrder("");
+    setEtajOrder("");
+    setDfOrder("");
+  };
   const openProductModal = (product: Product) => {
     setModalType("product");
     setSelectedProduct(product);
@@ -120,24 +135,24 @@ export const HomePage = () => {
     setQuantityModal(1);
   };
 
-  const items: MenuProps["items"] = useMemo(
-    () => [
-      {
-        label: "Аккаунт",
-        key: "0",
-      },
-      {
-        label: "Настройки",
-        key: "1",
-      },
-      {
-        label: "Админ",
-        key: "2",
-        onClick: () => navigate("/login"),
-      },
-    ],
-    [navigate]
-  );
+  // const items: MenuProps["items"] = useMemo(
+  //   () => [
+  //     {
+  //       label: "Аккаунт",
+  //       key: "0",
+  //     },
+  //     {
+  //       label: "Настройки",
+  //       key: "1",
+  //     },
+  //     {
+  //       label: "Админ",
+  //       key: "2",
+  //       onClick: () => navigate("/login"),
+  //     },
+  //   ],
+  //   [navigate]
+  // );
 
   const filteredProducts = product.filter(
     (p) => p.categoryId === selectedCategory
@@ -230,11 +245,11 @@ export const HomePage = () => {
         <header className="container flex justify-between px-8">
           <img src={"/logo.svg"} alt="" />
           <div>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Button type="text">
-                <CgProfile />
-              </Button>
-            </Dropdown>
+            {/* <Dropdown menu={{ items }} trigger={["click"]}> */}
+            <Button onClick={() => navigate("/login")} type="text">
+              <CgProfile />
+            </Button>
+            {/* </Dropdown> */}
           </div>
         </header>
 
@@ -333,45 +348,57 @@ export const HomePage = () => {
                       }}
                     >
                       {basketProduct.map((item) => (
-                        <div className="flex min-h-[84px] w-[278px] borde-[#F2F2F3] border-b-2 items-center gap-2">
+                        <div className="flex min-h-[84px]  borde-[#F2F2F3] border-b-2 items-center gap-2">
                           <div>
                             <img
-                              className="w-[64px] h-[52px] rounded-[8px] object-cover"
+                              className="!w-[64px] !h-[52px] rounded-[8px] object-cover"
                               src={item.product.image}
                               alt=""
                             />
                           </div>
-                          <div>
-                            <Typography>{item.product.title}</Typography>
-                            <Typography>{item.product.weight}г</Typography>
-                            <Typography>
-                              {item.product.price * item.quantity}₽
-                            </Typography>
-                          </div>
-                          <div className="flex justify-center items-center bg-[#F2F2F3] rounded-[12px] w-[84px] h-[40px] p-3">
-                            <Button
-                              onClick={() =>
-                                handleDecreaseQuatity(item.product.id)
-                              }
-                              style={{
-                                border: "none",
-                                background: "transparent",
-                              }}
-                            >
-                              -
-                            </Button>
-                            <p>{item.quantity}</p>
-                            <Button
-                              onClick={() =>
-                                handleIncreaseQuatity(item.product.id)
-                              }
-                              style={{
-                                border: "none",
-                                background: "transparent",
-                              }}
-                            >
-                              +
-                            </Button>
+                          <div className="flex justify-between w-[100%]">
+                            <div>
+                              <Typography style={{ fontSize: "16px" }}>
+                                {item.product.title}
+                              </Typography>
+                              <Typography
+                                style={{
+                                  fontSize: "16px",
+                                  color: "#B1B1B1",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {item.product.weight}г
+                              </Typography>
+                              <Typography>
+                                {item.product.price * item.quantity}₽
+                              </Typography>
+                            </div>
+                            <div className="flex justify-center items-center bg-[#F2F2F3] rounded-[12px] w-[84px] h-[40px] p-3">
+                              <Button
+                                onClick={() =>
+                                  handleDecreaseQuatity(item.product.id)
+                                }
+                                style={{
+                                  border: "none",
+                                  background: "transparent",
+                                }}
+                              >
+                                -
+                              </Button>
+                              <p>{item.quantity}</p>
+                              <Button
+                                onClick={() =>
+                                  handleIncreaseQuatity(item.product.id)
+                                }
+                                style={{
+                                  border: "none",
+                                  background: "transparent",
+                                }}
+                              >
+                                +
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -392,7 +419,7 @@ export const HomePage = () => {
                       onClick={openOrderModal}
                       style={{
                         backgroundColor: "#FF7020",
-                        width: "268px",
+                        width: "100%",
                         height: "40px",
                         display: "flex",
                         justifyContent: "center",
@@ -401,13 +428,16 @@ export const HomePage = () => {
                         fontSize: "16px",
                         borderRadius: "16px",
                         border: "0",
+                        marginBlock: "10px",
                       }}
                     >
                       Оформить заказ
                     </Button>
-                    <div className="flex items-center mt-3">
+                    <div className="flex items-center mt-3 ">
                       <img src="/Доставка.png" alt="" />
-                      <Typography style={{ fontSize: "12px" }}>
+                      <Typography
+                        style={{ fontSize: "12px", marginInlineStart: "5px" }}
+                      >
                         Бесплатная доставка
                       </Typography>
                     </div>
@@ -443,26 +473,12 @@ export const HomePage = () => {
                   />
                 ) : (
                   filteredProducts?.map((item, index) => (
-                    <Zoom
-                      triggerOnce
-                      style={{ display: "flex" }}
-                      // className="w-[270px] "
-                    >
+                    <Zoom triggerOnce style={{ display: "flex" }}>
                       <Col
-                        // key={index}
                         style={{
                           width: "100%",
-                          // height: "411px",
                           display: "flex",
-                          // marginInline: "auto",
-                          // gap: 10,
-                          // padding: "15px",
-                          // alignItems: "center",
-                          // flexDirection: "column",
-                          // backgroundColor: "white",
                           borderRadius: 10,
-                          // marginInline: 10,
-                          // marginBottom: 20,
                         }}
                         xs={11}
                         sm={11}
@@ -535,16 +551,14 @@ export const HomePage = () => {
         </div>
       </div>
       <Modal
-        // className=""
-        // css={customStyleModal1}
         footer={null}
         width="100%"
-        // height="432px"
         open={isModalOpen}
+        centered
         onOk={handleOk}
         onCancel={handleCancel}
         style={{ borderRadius: "24px", width: "684px" }}
-        className="customStyleModalI  sm:w-full mx-4 sm:max-h-[100vh] md:w-full md:h-full lg:w-[684px] lg:h-auto overflow-hidden"
+        className="customStyleModalI  sm:w-full mx-4 sm:max-h-[100vh] md:w-full md:w-[684px] lg:w-[684px] lg:h-auto xl:!w-[684px] overflow-hidden"
       >
         {modalType === "product" && selectedProduct && (
           <div className="flex flex-col p-6 py-10">
@@ -627,82 +641,98 @@ export const HomePage = () => {
             <div className="bg-[#FFAB08] min-w-[342px]  h-[432px] flex items-center justify-center">
               <img src="./modal2.svg" alt="" />
             </div>
-            <div className="p-5 flex flex-col items-center bg-[#F9F9F9]">
+            <div className="p-5 flex flex-col items-center w-[100%] bg-[#F9F9F9]">
               <Title>Доставка</Title>
-              <div className="flex gap-3 flex-col">
-                <Input
-                  style={{
-                    height: "40px",
-                    border: "1px solid #F2F2F3",
-                    borderRadius: "12px",
-                  }}
-                  placeholder="Ваше имя"
-                />
-                <Input
-                  style={{
-                    height: "40px",
-                    border: "1px solid #F2F2F3",
-                    borderRadius: "12px",
-                  }}
-                  placeholder="Телефон"
-                />
-                <Radio.Group
-                  onChange={(e) => setDeliveryType(e.target.value)}
-                  value={deliveryType}
-                >
-                  <Radio value="Самовывоз">Самовывоз</Radio>
-                  <Radio value="Доставка">Доставка</Radio>
-                </Radio.Group>
+              <div className="flex gap-3 justify-between w-[100%] h-[100%] flex-col">
+                <div className="flex w-[100%] flex-col gap-4">
+                  <Input
+                    value={nameOrder}
+                    onChange={(e) => setNameOrder(e.target.value)}
+                    style={{
+                      height: "40px",
+                      border: "1px solid #F2F2F3",
+                      borderRadius: "12px",
+                      width: "100%",
+                    }}
+                    placeholder="Ваше имя"
+                  />
+                  <Input
+                    value={phoneOrder}
+                    onChange={(e) => setPhoneOrder(e.target.value)}
+                    style={{
+                      height: "40px",
+                      border: "1px solid #F2F2F3",
+                      borderRadius: "12px",
+                    }}
+                    placeholder="Телефон"
+                  />
 
-                {deliveryType === "Доставка" && (
-                  <>
-                    <Input
-                      style={{
-                        height: "40px",
-                        border: "1px solid #F2F2F3",
-                        borderRadius: "12px",
-                      }}
-                      placeholder="Улица, дом, квартира"
-                    />
-                    <div className="flex gap-3">
+                  <Radio.Group
+                    onChange={(e) => setDeliveryType(e.target.value)}
+                    value={deliveryType}
+                  >
+                    <Radio value="Самовывоз">Самовывоз</Radio>
+                    <Radio value="Доставка">Доставка</Radio>
+                  </Radio.Group>
+
+                  {deliveryType === "Доставка" && (
+                    <>
                       <Input
+                        value={kvOrder}
+                        onChange={(e) => OrderKvOrder(e.target.value)}
                         style={{
                           height: "40px",
                           border: "1px solid #F2F2F3",
                           borderRadius: "12px",
                         }}
-                        placeholder="Этаж"
+                        placeholder="Улица, дом, квартира"
                       />
-                      <Input
-                        style={{
-                          height: "40px",
-                          border: "1px solid #F2F2F3",
-                          borderRadius: "12px",
-                        }}
-                        placeholder="Домофон"
-                      />
-                    </div>
-                  </>
-                )}
+                      <div className="flex gap-3">
+                        <Input
+                          value={etajOrder}
+                          onChange={(e) => setEtajOrder(e.target.value)}
+                          style={{
+                            height: "40px",
+                            border: "1px solid #F2F2F3",
+                            borderRadius: "12px",
+                          }}
+                          placeholder="Этаж"
+                        />
+                        <Input
+                          value={dfOrder}
+                          onChange={(e) => setDfOrder(e.target.value)}
+                          style={{
+                            height: "40px",
+                            border: "1px solid #F2F2F3",
+                            borderRadius: "12px",
+                          }}
+                          placeholder="Домофон"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-              <Button
-                onClick={openOrderModal}
-                style={{
-                  backgroundColor: "#FF7020",
-                  width: "100%",
-                  height: "40px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
-                  fontSize: "16px",
-                  borderRadius: "16px",
-                  marginTop: "20px",
-                  border: "0",
-                }}
-              >
-                Оформить
-              </Button>
+              <div className="w-[100%]">
+                <Button
+                  onClick={handleOrder}
+                  style={{
+                    backgroundColor: "#FF7020",
+                    width: "100%",
+                    height: "40px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
+                    fontSize: "16px",
+                    borderRadius: "16px",
+                    marginTop: "20px",
+                    border: "0",
+                  }}
+                >
+                  Оформить
+                </Button>
+              </div>
             </div>
           </div>
         )}

@@ -1,6 +1,20 @@
 import { css } from "@emotion/react";
-import { Button, Form, Input, Modal, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Form,
+  Image,
+  Input,
+  Modal,
+  Upload,
+  UploadProps,
+  UploadFile,
+} from "antd";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const customStyleModal = css`
   .custom-modal .ant-modal-content {
@@ -14,8 +28,13 @@ interface TypeProps {
   handleCancel: () => void;
   isModalOpen: boolean;
   form: any;
-  handleSubmit: (value: { name: string; image: string }) => Promise<void>;
+  handleSubmit: (value: { name: string; image?: string }) => Promise<void>;
   editCategoryId: number | null;
+  previewUrl: string | null;
+  uploadProps: UploadProps;
+  fileList: UploadFile[];
+  setPreviewUrl: Dispatch<SetStateAction<string | null>>;
+  setFileList: Dispatch<SetStateAction<UploadFile<any>[]>>;
 }
 
 const DrawerCategory: React.FC<TypeProps> = ({
@@ -25,12 +44,19 @@ const DrawerCategory: React.FC<TypeProps> = ({
   form,
   handleSubmit,
   editCategoryId,
+  uploadProps,
+  fileList,
+  previewUrl,
+  setPreviewUrl,
+  setFileList,
 }) => {
-  const onSubmit = (values: { name: string; image: any }) => {
-    handleSubmit({
-      ...values,
-      image: values.image?.fileList?.[0]?.originFileObj || null,
-    });
+  const [previewImage, setPreviewImage] = useState<string>("");
+
+  const removeImage = () => {
+    setPreviewImage("");
+    setPreviewUrl(null);
+    setFileList([]);
+    form.setFieldsValue({ image: undefined });
   };
 
   return (
@@ -45,23 +71,29 @@ const DrawerCategory: React.FC<TypeProps> = ({
         onCancel={handleCancel}
         footer={null}
       >
-        <Form layout="vertical" form={form} onFinish={onSubmit}>
+        <Form layout="vertical" form={form} onFinish={handleSubmit}>
           <Form.Item name="name" label="Name">
             <Input />
           </Form.Item>
-          <Form.Item
-            name="image"
-            label="Image"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
-          >
-            <Upload
-              listType="picture"
-              beforeUpload={() => false} // Prevent automatic upload
-              maxCount={1} // Limit to one image
-            >
-              <Button icon={<UploadOutlined />}>Select Image</Button>
-            </Upload>
+          <Form.Item name="image">
+            {previewUrl ? (
+              <div>
+                <Image
+                  src={previewUrl}
+                  alt="Uploaded Image"
+                  style={{ maxWidth: "100%" }}
+                />
+                <Button
+                  icon={<DeleteOutlined />}
+                  onClick={removeImage}
+                  style={{ marginTop: "10px", color: "red" }}
+                >
+                  Delete Image
+                </Button>
+              </div>
+            ) : (
+              <Upload {...uploadProps}>Upload img</Upload>
+            )}
           </Form.Item>
           <div className="flex gap-3 justify-end">
             <Button onClick={handleCancel}>Cancel</Button>

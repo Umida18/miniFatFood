@@ -17,11 +17,6 @@ const items = [
     icon: <TbCategory2 />,
     label: <Link to="categoryPage">Category</Link>,
   },
-  // {
-  //   key: "statisticPage",
-  //   icon: <IoCellularOutline />,
-  //   label: <Link to="statisticPage">Statistic</Link>,
-  // },
 ];
 
 const LayoutPage = ({ children }: { children: React.ReactNode }) => {

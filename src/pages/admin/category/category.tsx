@@ -5,7 +5,16 @@ import {
   setIsLoadingCategory,
 } from "@src/store/slices/categorySlice";
 import { ICategory } from "@srctypes";
-import { Button, Form, Table, message } from "antd";
+import {
+  Button,
+  Form,
+  GetProp,
+  Table,
+  Upload,
+  UploadFile,
+  UploadProps,
+  message,
+} from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +24,16 @@ import { Content } from "antd/es/layout/layout";
 import DrawerCategory from "./drawerCategory";
 import HeaderCategory from "./headerCategory";
 
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 const CategoryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
@@ -23,6 +42,8 @@ const CategoryPage = () => {
   );
   const [pageSize, setPageSize] = useState(5);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
@@ -69,25 +90,53 @@ const CategoryPage = () => {
     fetchCategory();
   }, [dispatch]);
 
-  const handleSubmit = async (value: { name: string; image: string }) => {
+  const uploadProps: UploadProps = {
+    beforeUpload: (file) => {
+      const isImage = file.type.startsWith("image/");
+      if (!isImage) {
+        message.error("You can only upload image files!");
+      }
+      return isImage || Upload.LIST_IGNORE;
+    },
+    onChange: async ({ fileList }) => {
+      setFileList(fileList);
+
+      if (fileList.length > 0) {
+        const file = fileList[0].originFileObj as FileType;
+        const base64 = await getBase64(file);
+        setPreviewUrl(base64);
+      } else {
+        setPreviewUrl(null);
+      }
+    },
+    maxCount: 1,
+    listType: "picture-card",
+    fileList,
+  };
+
+  const handleSubmit = async (value: { name: string; image?: string }) => {
     try {
+      const data = {
+        ...value,
+        image: previewUrl || "",
+      };
       let response;
       if (editCategoryId === null) {
         response = await axios.post(
           "https://78d8cc4c8ae1e436.mokky.dev/category",
-          value
+          data
         );
         dispatch(setCategory([...category, response.data]));
         message.success("Category added successfully");
       } else if (editCategoryId !== undefined) {
         response = await axios.patch(
           `https://78d8cc4c8ae1e436.mokky.dev/category/${editCategoryId}`,
-          value
+          data
         );
         dispatch(
           setCategory(
             category.map((item) =>
-              item.id === editCategoryId ? { ...item, ...value } : item
+              item.id === editCategoryId ? { ...item, ...data } : item
             )
           )
         );
@@ -131,11 +180,7 @@ const CategoryPage = () => {
       dataIndex: "image",
       key: "image",
       render: (text: string, record: ICategory) => (
-        <img
-          src={`/public/${record.image}`}
-          alt={record.name}
-          style={{ width: 50 }}
-        />
+        <img src={record.image} alt={record.name} style={{ width: 50 }} />
       ),
     },
     {
@@ -192,6 +237,11 @@ const CategoryPage = () => {
         form={form}
         handleSubmit={handleSubmit}
         editCategoryId={editCategoryId}
+        previewUrl={previewUrl}
+        uploadProps={uploadProps}
+        fileList={fileList}
+        setFileList={setFileList}
+        setPreviewUrl={setPreviewUrl}
       />
     </div>
   );

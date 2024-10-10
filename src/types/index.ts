@@ -12,5 +12,5 @@ export interface Product {
 export interface ICategory {
   id: number;
   name: string;
-  image: string;
+  image?: string;
 }

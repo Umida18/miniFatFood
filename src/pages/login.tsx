@@ -1,20 +1,66 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Form, Input, Typography, message } from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Slide, Zoom } from "react-awesome-reveal";
 import { useNavigate } from "react-router-dom";
 
 const formStyle = css`
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 `;
+interface IData {
+  email: string;
+  parol: number;
+}
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [activeInput, setActiveInput] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<IData[]>([]);
 
-  const handleSubmitInfo = () => {
-    navigate("/layoutPage/productPage");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://544287c7d245201c.mokky.dev/SingIn"
+        );
+        setData(response.data);
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
+
+  const handeSubmit = async () => {
+    if (!email || !password) {
+      message.error(
+        "Пожалуйста, введите свой адрес электронной почты и пароль!"
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const user = data.find(
+        (item) => item.email === email && item.parol.toString() === password
+      );
+
+      if (user) {
+        message.success("Вы успешно вошли в систему");
+        navigate("/layoutPage/productPage");
+      } else {
+        message.error("Электронная почта или пароль неверны");
+      }
+    } catch (error) {
+      message.error("Произошла ошибка при входе");
+    } finally {
+      setLoading(false);
+    }
   };
-
   return (
     <div className="flex">
       <div className="flex-1">
@@ -49,14 +95,18 @@ const LoginPage = () => {
                   Войти
                 </Typography>
               </div>
-              <Form layout="vertical" onFinish={handleSubmitInfo}>
+              <Form layout="vertical" onFinish={handeSubmit}>
                 <Form.Item>
                   <Typography
                     style={{ fontSize: "18px", marginBottom: "10px" }}
                   >
                     Электронная почта
                   </Typography>
-                  <Input style={{ borderRadius: "10px", height: "40px" }} />
+                  <Input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ borderRadius: "10px", height: "40px" }}
+                  />
                 </Form.Item>
                 <Form.Item>
                   <Typography
@@ -64,7 +114,11 @@ const LoginPage = () => {
                   >
                     Пароль
                   </Typography>
-                  <Input style={{ borderRadius: "10px", height: "40px" }} />
+                  <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{ borderRadius: "10px", height: "40px" }}
+                  />
                 </Form.Item>
                 <Button
                   style={{

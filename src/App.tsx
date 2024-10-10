@@ -14,7 +14,6 @@ import LoginPage from "@src/pages/login";
 import LayoutPage from "@src/components/layout/layout";
 import CategoryPage from "@src/pages/admin/category/category";
 import ProductPage from "@src/pages/admin/product/product";
-import StatisticPage from "@src/pages/admin/statistic";
 
 function App() {
   return (
@@ -42,7 +41,6 @@ function App() {
               >
                 <Route path="categoryPage" element={<CategoryPage />} />
                 <Route path="productPage" element={<ProductPage />} />
-                <Route path="statisticPage" element={<StatisticPage />} />
               </Route>
 
               {/* <Route
