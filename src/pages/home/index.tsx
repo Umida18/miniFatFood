@@ -1,12 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import type { MenuProps } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { Bounce, JackInTheBox, Slide, Zoom } from "react-awesome-reveal";
+import { Bounce, Zoom } from "react-awesome-reveal";
 import {
   Button,
   Col,
-  Dropdown,
   Input,
   Modal,
   Radio,
@@ -16,7 +14,7 @@ import {
   Alert,
   message,
 } from "antd";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { ICategory, Product } from "@src/types";
 import { Footer } from "antd/es/layout/layout";
@@ -27,7 +25,6 @@ import { FaPhoneAlt } from "react-icons/fa";
 import ".//home.css";
 import { RootState } from "@src/store";
 import { api } from "./api";
-import { motion } from "framer-motion";
 import {
   setIsErrorProduct,
   setIsLoadingProduct,
@@ -472,7 +469,7 @@ export const HomePage = () => {
                     closable
                   />
                 ) : (
-                  filteredProducts?.map((item, index) => (
+                  filteredProducts?.map((item) => (
                     <Zoom triggerOnce style={{ display: "flex" }}>
                       <Col
                         style={{
@@ -558,7 +555,7 @@ export const HomePage = () => {
         onOk={handleOk}
         onCancel={handleCancel}
         style={{ borderRadius: "24px", width: "684px" }}
-        className="customStyleModalI  sm:w-full mx-4 sm:max-h-[100vh] md:w-full md:w-[684px] lg:w-[684px] lg:h-auto xl:!w-[684px] overflow-hidden"
+        className="customStyleModalI  sm:w-full mx-4 sm:max-h-[100vh] md:w-[684px] lg:w-[684px] lg:h-auto xl:!w-[684px] overflow-hidden"
       >
         {modalType === "product" && selectedProduct && (
           <div className="flex flex-col p-6 py-10">

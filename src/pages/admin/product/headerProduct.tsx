@@ -1,11 +1,8 @@
 import { Button, Input, Typography } from "antd";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { Header } from "antd/es/layout/layout";
-import { ICategory } from "@src/types";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@src/store";
 
 interface showModal {
   showModal: () => void;

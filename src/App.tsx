@@ -1,11 +1,5 @@
 import { ConfigProvider } from "antd";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { HomePage } from "./pages/home";
 import { Provider } from "react-redux";
 import store from "@src/store";
@@ -42,11 +36,6 @@ function App() {
                 <Route path="categoryPage" element={<CategoryPage />} />
                 <Route path="productPage" element={<ProductPage />} />
               </Route>
-
-              {/* <Route
-                path="*"
-                element={<Navigate to="/layoutPage/categoryPage" />}
-              /> */}
             </Routes>
           </ErrorBoundarayContainer>
         </ConfigProvider>

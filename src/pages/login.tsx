@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { Button, Form, Input, Typography, message } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Slide, Zoom } from "react-awesome-reveal";
+import { Zoom } from "react-awesome-reveal";
 import { useNavigate } from "react-router-dom";
 
 const formStyle = css`
@@ -18,7 +18,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [activeInput, setActiveInput] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IData[]>([]);
 

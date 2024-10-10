@@ -36,9 +36,7 @@ const DrawerProduct: React.FC<TypeProps> = ({
   handleSubmit,
   editProductId,
 }) => {
-  const { category, isLoadingCategory, isErrorCategory } = useSelector(
-    (state: RootState) => state.dataCategory
-  );
+  const { category } = useSelector((state: RootState) => state.dataCategory);
   return (
     <div>
       <Modal

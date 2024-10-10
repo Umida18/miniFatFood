@@ -9,11 +9,7 @@ import {
   UploadProps,
   UploadFile,
 } from "antd";
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Dispatch, SetStateAction, useState } from "react";
 
 const customStyleModal = css`
@@ -45,7 +41,6 @@ const DrawerCategory: React.FC<TypeProps> = ({
   handleSubmit,
   editCategoryId,
   uploadProps,
-  fileList,
   previewUrl,
   setPreviewUrl,
   setFileList,
