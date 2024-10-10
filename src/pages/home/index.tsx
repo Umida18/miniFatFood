@@ -53,6 +53,7 @@ export const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  //@ts-ignore
   const [quantity, setQuantity] = useState<number>(1);
   const [quantityModal, setQuantityModal] = useState<number>(1);
   const [basketProduct, setBasketProduct] = useState<

@@ -2,7 +2,6 @@ import React from "react";
 import { Layout, Menu, theme } from "antd";
 import { TbCategory2 } from "react-icons/tb";
 import { IoFastFoodOutline } from "react-icons/io5";
-import { IoCellularOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 const { Content, Sider } = Layout;
 
