@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { RootState } from "@src/store";
-import { Button, Col, Form, Input, Modal, Row, Select } from "antd";
+import { AutoForm, FieldType } from "@src/components/autoForm";
+import { Button, Drawer, Modal, Select, Space } from "antd";
 import { useSelector } from "react-redux";
 
 const customStyleModal = css`
@@ -8,23 +9,14 @@ const customStyleModal = css`
     padding: 15px !important; /* Overrides the global padding */
   }
 `;
-const { Option } = Select;
+
 interface TypeProps {
   showModal: () => void;
   handleOk: () => void;
   handleCancel: () => void;
   isModalOpen: boolean;
   form: any;
-  handleSubmit: (value: {
-    image: string;
-    title: string;
-    price: number;
-    weight: number;
-    desc: string;
-    compound: string[];
-    calories: number;
-    categoryId: number;
-  }) => Promise<void>;
+  handleSubmit: (value: Record<string, any>) => void;
   editProductId: number | null;
 }
 
@@ -37,69 +29,86 @@ const DrawerProduct: React.FC<TypeProps> = ({
   editProductId,
 }) => {
   const { category } = useSelector((state: RootState) => state.dataCategory);
+
+  const fields: FieldType[] = [
+    {
+      label: "Image",
+      name: "image",
+      span: 24,
+      rules: [{ required: true, message: "Image is required!" }],
+    },
+    {
+      label: "Name",
+      name: "title",
+      span: 24,
+      rules: [{ required: true, message: "Title is required!" }],
+    },
+    {
+      label: "Price",
+      name: "price",
+      type: "number",
+      span: 12,
+      rules: [{ required: true, message: "Price is required!" }],
+    },
+    {
+      label: "Weight",
+      name: "weight",
+      type: "number",
+      span: 12,
+      rules: [{ required: true, message: "Weight is required!" }],
+    },
+    {
+      label: "Description",
+      name: "desc",
+      span: 24,
+      rules: [{ required: true, message: "Description is required!" }],
+    },
+    {
+      label: "Compound",
+      name: "compound",
+      span: 24,
+      rules: [{ required: true, message: "Compound is required!" }],
+    },
+    {
+      label: "Calories",
+      name: "calories",
+      type: "number",
+      span: 24,
+      rules: [{ required: true, message: "Calories are required!" }],
+    },
+    {
+      label: "Category",
+      name: "categoryId",
+      type: "select",
+      options: category.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })),
+      span: 24,
+      rules: [{ required: true, message: "Category is required!" }],
+    },
+  ];
+
   return (
     <div>
-      <Modal
-        className="custom-modal"
-        css={customStyleModal}
-        style={{ padding: "15px", top: "10px" }}
+      <Drawer
+        width="600px"
+        title={
+          editProductId ? "Редактировать продукт" : "Добавить новый продукт"
+        }
+        onClose={handleCancel}
         open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form layout="vertical" form={form} onFinish={handleSubmit}>
-          <Form.Item name="image" label="Image">
-            <Input />
-          </Form.Item>
-          <Form.Item name="title" label="Name">
-            <Input />
-          </Form.Item>
-          <Row gutter={32}>
-            <Col>
-              <Form.Item name="price" label="price">
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col>
-              <Form.Item name="weight" label="weight">
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item name="desc" label="desc">
-            <Input />
-          </Form.Item>
-          <Form.Item name="compound" label="compound">
-            <Input />
-          </Form.Item>
-          <Form.Item name="calories" label="calories">
-            <Input />
-          </Form.Item>
-          <Form.Item name="categoryId" label="Category">
-            <Select>
-              {category.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <div className="flex gap-3 justify-end">
+        extra={
+          <Space>
             <Button onClick={handleCancel}>Cancel</Button>
-            <Button
-              style={{
-                backgroundColor: "#ffab08",
-                border: "0px",
-                color: "white",
-              }}
-              htmlType="submit"
-            >
-              {editProductId ? "Edit" : "Add"}
+            <Button onClick={() => form.submit()} type="primary">
+              Submit
             </Button>
-          </div>
-        </Form>
-      </Modal>
+          </Space>
+        }
+      >
+        <AutoForm fields={fields} form={form} handleSubmit={handleSubmit} />
+      </Drawer>
     </div>
   );
 };

@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { ICategory, Product } from "@src/types";
 import { Footer } from "antd/es/layout/layout";
-
+// import { format } from "date-fns";
 import { FaTelegramPlane } from "react-icons/fa";
 import { FaVk } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -49,6 +49,76 @@ const buttonStyle = css`
 // const customStyleModal1 = css`
 //   padding: 0px !important;
 // `;
+
+const imageStyles = css`
+  @media (max-width: 1600px) {
+    width: 255px !important;
+  }
+  @media (max-width: 1280px) {
+    min-width: 225px !important;
+  }
+  @media (max-width: 992px) {
+    min-width: 255px !important;
+  }
+  @media (max-width: 768px) {
+    min-width: 225px !important;
+  }
+`;
+const basketStyles = css`
+  @media (max-width: 992px) {
+    max-width: 350px !important;
+  }
+`;
+const contProductStyle = css`
+  padding: 0px;
+  @media (max-width: 480px) {
+    // display: flex;
+    // justify-content: center !important;
+    // flex-direction: column !important;
+    // width: 260px !important;
+  }
+`;
+
+const titleStyles = css`
+  @media (max-width: 480px) {
+    font-size: 24px !important;
+    margin-bottom: 0px !important;
+  }
+`;
+const subtileStyles = css`
+  @media (max-width: 576px) {
+    // font-size: 12px !important;
+    margin-top: 10px !important;
+  }
+  @media (max-width: 480px) {
+    font-size: 12px !important;
+    margin-top: 10px !important;
+  }
+`;
+
+const contProdStyle = css`
+  @media (max-width: 1600px) {
+    // max-width: 255px !important;
+    // padding: 10px !important;
+    // margin-inline: auto;
+  }
+  @media (max-width: 992px) {
+    padding-inline: 10px !important;
+  }
+`;
+
+const rowProductStyle = css`
+  gap: 10px @media (max-width: 1600px) {
+    // display: flex;
+    // justify-content: flex-start !important;
+    // margin-inline: 0px !important;
+  }
+  @media (max-width: 480px) {
+    display: flex;
+    justify-content: center;
+    margin-inline: auto;
+  }
+`;
 export const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -56,6 +126,13 @@ export const HomePage = () => {
   //@ts-ignore
   const [quantity, setQuantity] = useState<number>(1);
   const [quantityModal, setQuantityModal] = useState<number>(1);
+  const [deliveryType, setDeliveryType] = useState("Самовывоз");
+  const [modalType, setModalType] = useState<"order" | "product" | null>(null);
+  const [nameOrder, setNameOrder] = useState<string>("");
+  const [phoneOrder, setPhoneOrder] = useState<string>("");
+  const [kvOrder, OrderKvOrder] = useState<string>("");
+  const [etajOrder, setEtajOrder] = useState<string>("");
+  const [dfOrder, setDfOrder] = useState<string>("");
   const [basketProduct, setBasketProduct] = useState<
     { product: Product; quantity: number }[]
   >([]);
@@ -66,8 +143,9 @@ export const HomePage = () => {
   const { category, isLoadingCategory, isErrorCategory } = useSelector(
     (state: RootState) => state.dataCategory
   );
-  const [deliveryType, setDeliveryType] = useState("Самовывоз");
+
   const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(setIsLoadingProduct(true));
     dispatch(setIsErrorProduct(false));
@@ -95,13 +173,6 @@ export const HomePage = () => {
       });
   }, [dispatch]);
 
-  const [modalType, setModalType] = useState<"order" | "product" | null>(null);
-  const [nameOrder, setNameOrder] = useState<string>("");
-  const [phoneOrder, setPhoneOrder] = useState<string>("");
-  const [kvOrder, OrderKvOrder] = useState<string>("");
-  const [etajOrder, setEtajOrder] = useState<string>("");
-  const [dfOrder, setDfOrder] = useState<string>("");
-
   const openOrderModal = () => {
     setModalType("order");
     setIsModalOpen(true);
@@ -115,6 +186,7 @@ export const HomePage = () => {
     OrderKvOrder("");
     setEtajOrder("");
     setDfOrder("");
+    setBasketProduct([]);
   };
   const openProductModal = (product: Product) => {
     setModalType("product");
@@ -132,25 +204,6 @@ export const HomePage = () => {
     setQuantity(1);
     setQuantityModal(1);
   };
-
-  // const items: MenuProps["items"] = useMemo(
-  //   () => [
-  //     {
-  //       label: "Аккаунт",
-  //       key: "0",
-  //     },
-  //     {
-  //       label: "Настройки",
-  //       key: "1",
-  //     },
-  //     {
-  //       label: "Админ",
-  //       key: "2",
-  //       onClick: () => navigate("/login"),
-  //     },
-  //   ],
-  //   [navigate]
-  // );
 
   const filteredProducts = product.filter(
     (p) => p.categoryId === selectedCategory
@@ -257,13 +310,14 @@ export const HomePage = () => {
           </Bounce>
           <Bounce triggerOnce>
             <div>
-              <Typography.Title level={1} className="">
+              <Typography.Title level={1} css={titleStyles} className="">
                 Только самые <br></br>
                 <span className="text-secondary">сочные бургеры!</span>
               </Typography.Title>
-              <Typography className="text-white mt-12">
+              <Typography css={subtileStyles} className="text-white mt-12">
                 Бесплатная доставка от 599₽
               </Typography>
+              {/* <Typography>{format(new Date(), "dd MMM, yyyy")}</Typography> */}
             </div>
           </Bounce>
         </div>
@@ -308,15 +362,26 @@ export const HomePage = () => {
             ))
           )}
         </div>
-        <div className="container my-10 mx-auto px-14 ">
+        <div className="container px-10 mx-auto  ">
           <Row
-            gutter={[20, 20]}
+            gutter={[10, 10]}
             style={{ display: "flex", justifyContent: "center" }}
             className="container"
           >
-            <Col sm={24} lg={6} style={{ marginTop: "65px", width: "100%" }}>
+            <Col
+              sm={24}
+              md={24}
+              lg={10}
+              xl={8}
+              style={{
+                marginTop: "65px",
+                width: "100%",
+                paddingInline: "40px",
+              }}
+            >
               <div
-                className={` bg-white p-6 flex justify-between flex-col rounded-[10px] ${
+                css={basketStyles}
+                className={` sticky top-[30px] bg-white p-6 flex justify-between flex-col rounded-[10px] ${
                   basketProduct.length > 0 ? "" : ""
                 }`}
               >
@@ -445,14 +510,29 @@ export const HomePage = () => {
                 )}
               </div>
             </Col>
-            <Col xs={24} sm={24} md={18} lg={18} className="container">
+            <Col
+              css={contProductStyle}
+              // className="container"
+              style={
+                {
+                  // marginBottom: "25px",
+                  // width: "100%",
+                  // display: "flex",
+                  // justifyContent: "center",
+                  // borderRadius: 10,
+                  // marginInline: "0px auto",
+                }
+              }
+              xs={24}
+              sm={24}
+              md={18}
+              lg={14}
+              xl={16}
+            >
               <div className="ml-9">
                 <Title style={{}}>{categoryName}</Title>
               </div>
-              <Row
-                style={{ display: "flex", gap: 30 }}
-                className="flex container px-10"
-              >
+              <Row css={rowProductStyle} gutter={[10, 10]} className="m-[0px] ">
                 {isLoadingProduct ? (
                   <div>
                     <Skeleton.Image
@@ -471,27 +551,34 @@ export const HomePage = () => {
                   />
                 ) : (
                   filteredProducts?.map((item) => (
-                    <Zoom triggerOnce style={{ display: "flex" }}>
-                      <Col
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          borderRadius: 10,
-                        }}
-                        xs={11}
-                        sm={11}
-                        md={8}
-                        lg={8}
-                        xl={8}
+                    <Col
+                      css={contProdStyle}
+                      style={{
+                        marginBottom: "25px",
+                        // width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        // borderRadius: 10,
+                      }}
+                      xs={24}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      xl={8}
+                    >
+                      <Zoom
+                        triggerOnce
+                        style={{ display: "flex", justifyContent: "center" }}
                       >
                         <div>
                           <img
+                            css={imageStyles}
                             src={item.image}
                             alt=""
-                            className="w-full rounded-2xl h-[215px] object-cover"
+                            className="rounded-2xl h-[215px] object-cover"
                             // w-[270px]
                           />
-                          <div className="w-[270px] bg-white p-3 pt-0 rounded-b-2xl h-[176px] flex flex-col justify-between">
+                          <div className="w-[100%] bg-white p-3 pt-0 rounded-b-2xl  flex flex-col justify-between">
                             <div className="flex flex-col">
                               <Text
                                 style={{
@@ -539,8 +626,8 @@ export const HomePage = () => {
                             </div>
                           </div>
                         </div>
-                      </Col>
-                    </Zoom>
+                      </Zoom>
+                    </Col>
                   ))
                 )}
               </Row>
@@ -552,19 +639,20 @@ export const HomePage = () => {
         footer={null}
         width="100%"
         open={isModalOpen}
+        height="100vh"
         centered
         onOk={handleOk}
         onCancel={handleCancel}
-        style={{ borderRadius: "24px", width: "684px" }}
-        className="customStyleModalI  sm:w-full mx-4 sm:max-h-[100vh] md:w-[684px] lg:w-[684px] lg:h-auto xl:!w-[684px] overflow-hidden"
+        style={{ borderRadius: "24px", top: "10%" }}
+        className="customStyleModalI !rounded-[24px]  sm:w-full sm:!top-0 mx-4 sm:max-h-[100vh] md:!w-[684px] lg:!w-[684px] lg:h-auto xl:!w-[684px] overflow-hidden"
       >
         {modalType === "product" && selectedProduct && (
-          <div className="flex flex-col p-6 py-10">
+          <div className="flex flex-col  p-6 py-10">
             <div>
               <Title>{selectedProduct.title}</Title>
             </div>
             <div className="flex flex-col gap-10">
-              <div className="flex gap-3">
+              <div className="flex gap-3  sm:!flex-col md:!flex-col xs:flex-col lg:!flex-row">
                 <div className="w-[276px] h-[220px]">
                   <img
                     className="min-w-[276px] h-[220px] object-cover"
@@ -635,15 +723,20 @@ export const HomePage = () => {
           </div>
         )}
         {modalType === "order" && (
-          <div className="flex">
+          <div className="flex ">
             <div className="bg-[#FFAB08] min-w-[342px]  h-[432px] flex items-center justify-center">
-              <img src="./modal2.svg" alt="" />
+              <img
+                className="rounded-[1rem] object-cover"
+                src="./modal2.svg"
+                alt=""
+              />
             </div>
             <div className="p-5 flex flex-col items-center w-[100%] bg-[#F9F9F9]">
               <Title>Доставка</Title>
               <div className="flex gap-3 justify-between w-[100%] h-[100%] flex-col">
                 <div className="flex w-[100%] flex-col gap-4">
                   <Input
+                    required
                     value={nameOrder}
                     onChange={(e) => setNameOrder(e.target.value)}
                     style={{
@@ -655,6 +748,7 @@ export const HomePage = () => {
                     placeholder="Ваше имя"
                   />
                   <Input
+                    required
                     value={phoneOrder}
                     onChange={(e) => setPhoneOrder(e.target.value)}
                     style={{
@@ -676,6 +770,7 @@ export const HomePage = () => {
                   {deliveryType === "Доставка" && (
                     <>
                       <Input
+                        required
                         value={kvOrder}
                         onChange={(e) => OrderKvOrder(e.target.value)}
                         style={{
@@ -687,6 +782,7 @@ export const HomePage = () => {
                       />
                       <div className="flex gap-3">
                         <Input
+                          required
                           value={etajOrder}
                           onChange={(e) => setEtajOrder(e.target.value)}
                           style={{
@@ -697,6 +793,7 @@ export const HomePage = () => {
                           placeholder="Этаж"
                         />
                         <Input
+                          required
                           value={dfOrder}
                           onChange={(e) => setDfOrder(e.target.value)}
                           style={{

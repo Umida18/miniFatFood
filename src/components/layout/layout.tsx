@@ -9,12 +9,12 @@ const items = [
   {
     key: "productPage",
     icon: <IoFastFoodOutline />,
-    label: <Link to="productPage">Product</Link>,
+    label: <Link to="/admin/product">Product</Link>,
   },
   {
     key: "categoryPage",
     icon: <TbCategory2 />,
-    label: <Link to="categoryPage">Category</Link>,
+    label: <Link to="/admin/category">Category</Link>,
   },
 ];
 

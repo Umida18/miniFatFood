@@ -114,25 +114,29 @@ const CategoryPage = () => {
     fileList,
   };
 
-  const handleSubmit = async (value: { name: string; image?: string }) => {
+  const handleSubmit = async (value: Record<string, any>) => {
     try {
       const data = {
         ...value,
         image: previewUrl || "",
       };
+
       let response;
+
       if (editCategoryId === null) {
         response = await axios.post(
           "https://78d8cc4c8ae1e436.mokky.dev/category",
           data
         );
+
         dispatch(setCategory([...category, response.data]));
         message.success("Category added successfully");
-      } else if (editCategoryId !== undefined) {
+      } else if (editCategoryId) {
         response = await axios.patch(
           `https://78d8cc4c8ae1e436.mokky.dev/category/${editCategoryId}`,
           data
         );
+
         dispatch(
           setCategory(
             category.map((item) =>
@@ -142,8 +146,9 @@ const CategoryPage = () => {
         );
         message.success("Category successfully updated!");
       } else {
-        throw new Error("error");
+        throw new Error("Invalid category ID");
       }
+
       setIsModalOpen(false);
     } catch (error: any) {
       message.error("An error has occurred. Try again.");
@@ -230,7 +235,7 @@ const CategoryPage = () => {
         )}
       </Content>
       <DrawerCategory
-        showModal={showModal}
+        // showModal={showModal}
         handleOk={handleOk}
         handleCancel={handleCancel}
         isModalOpen={isModalOpen}
@@ -238,8 +243,8 @@ const CategoryPage = () => {
         handleSubmit={handleSubmit}
         editCategoryId={editCategoryId}
         previewUrl={previewUrl}
-        uploadProps={uploadProps}
-        fileList={fileList}
+        // uploadProps={uploadProps}
+        // fileList={fileList}
         setFileList={setFileList}
         setPreviewUrl={setPreviewUrl}
       />

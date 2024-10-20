@@ -92,16 +92,7 @@ const ProductPage = () => {
     fetchProduct();
   }, [dispatch]);
 
-  const handleSubmit = async (value: {
-    image: string;
-    title: string;
-    price: number;
-    weight: number;
-    desc: string;
-    compound: string[];
-    calories: number;
-    categoryId: number;
-  }) => {
+  const handleSubmit = async (value: Record<string, any>) => {
     try {
       let response;
       if (editProductId === null) {

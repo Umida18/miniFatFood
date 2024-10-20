@@ -21,45 +21,45 @@ const LoginPage = () => {
   // const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IData[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://544287c7d245201c.mokky.dev/SingIn"
-        );
-        setData(response.data);
-      } catch (error) {}
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://544287c7d245201c.mokky.dev/SingIn"
+  //       );
+  //       setData(response.data);
+  //     } catch (error) {}
+  //   };
+  //   fetchData();
+  // }, []);
 
-  const handeSubmit = async () => {
-    if (!email || !password) {
-      message.error(
-        "Пожалуйста, введите свой адрес электронной почты и пароль!"
-      );
-      return;
-    }
+  // const handeSubmit = async () => {
+  //   if (!email || !password) {
+  //     message.error(
+  //       "Пожалуйста, введите свой адрес электронной почты и пароль!"
+  //     );
+  //     return;
+  //   }
 
-    // setLoading(true);
+  //   // setLoading(true);
 
-    try {
-      const user = data.find(
-        (item) => item.email === email && item.parol.toString() === password
-      );
+  //   try {
+  //     const user = data.find(
+  //       (item) => item.email === email && item.parol.toString() === password
+  //     );
 
-      if (user) {
-        message.success("Вы успешно вошли в систему");
-        navigate("/layoutPage/productPage");
-      } else {
-        message.error("Электронная почта или пароль неверны");
-      }
-    } catch (error) {
-      message.error("Произошла ошибка при входе");
-    } finally {
-      // setLoading(false);
-    }
-  };
+  //     if (user) {
+  //       message.success("Вы успешно вошли в систему");
+  //       navigate("/layoutPage/productPage");
+  //     } else {
+  //       message.error("Электронная почта или пароль неверны");
+  //     }
+  //   } catch (error) {
+  //     message.error("Произошла ошибка при входе");
+  //   } finally {
+  //     // setLoading(false);
+  //   }
+  // };
   return (
     <div className="flex">
       <div className="flex-1">
@@ -94,7 +94,10 @@ const LoginPage = () => {
                   Войти
                 </Typography>
               </div>
-              <Form layout="vertical" onFinish={handeSubmit}>
+              <Form
+                layout="vertical"
+                onFinish={() => navigate("/admin/category")}
+              >
                 <Form.Item>
                   <Typography
                     style={{ fontSize: "18px", marginBottom: "10px" }}
