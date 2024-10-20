@@ -40,9 +40,6 @@ const LoginPage = () => {
       );
       return;
     }
-
-    // setLoading(true);
-
     try {
       const user = data.find(
         (item) => item.email === email && item.parol.toString() === password
@@ -94,10 +91,7 @@ const LoginPage = () => {
                   Войти
                 </Typography>
               </div>
-              <Form
-                layout="vertical"
-                onFinish={() => navigate("/admin/category")}
-              >
+              <Form layout="vertical" onFinish={handeSubmit}>
                 <Form.Item>
                   <Typography
                     style={{ fontSize: "18px", marginBottom: "10px" }}

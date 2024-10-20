@@ -5,7 +5,7 @@ import {
   setIsLoadingCategory,
 } from "@src/store/slices/categorySlice";
 import { ICategory } from "@srctypes";
-import { Button, Form, Table, UploadFile, message } from "antd";
+import { Button, Form, Table, message } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +23,6 @@ const CategoryPage = () => {
   );
   const [pageSize, setPageSize] = useState(5);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -199,7 +198,6 @@ const CategoryPage = () => {
         handleSubmit={handleSubmit}
         editCategoryId={editCategoryId}
         previewUrl={previewUrl}
-        setFileList={setFileList}
         setPreviewUrl={setPreviewUrl}
       />
     </div>

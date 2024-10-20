@@ -1,5 +1,5 @@
 import { AutoForm, FieldType } from "@src/components/autoForm";
-import { Button, Drawer, Space, UploadFile } from "antd";
+import { Button, Drawer, Space } from "antd";
 import { Dispatch, SetStateAction } from "react";
 
 interface TypeProps {
@@ -11,7 +11,6 @@ interface TypeProps {
   editCategoryId: number | null;
   previewUrl: string | null;
   setPreviewUrl: Dispatch<SetStateAction<string | null>>;
-  setFileList: Dispatch<SetStateAction<UploadFile<any>[]>>;
 }
 
 const DrawerCategory: React.FC<TypeProps> = ({
