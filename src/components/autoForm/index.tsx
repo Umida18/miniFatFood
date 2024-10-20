@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
+import { Col, Form, Input, InputNumber, Row, Select } from "antd";
 import React from "react";
 import type { FormInstance, SelectProps } from "antd";
 import { Rule } from "antd/es/form";
@@ -10,11 +10,6 @@ export type FieldType = {
   options?: SelectProps["options"];
   span?: number;
   rules?: Rule[];
-};
-
-type FormValues = {
-  name: string;
-  image?: string;
 };
 
 export const Field = ({
