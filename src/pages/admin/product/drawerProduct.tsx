@@ -1,14 +1,7 @@
-import { css } from "@emotion/react";
 import { RootState } from "@src/store";
 import { AutoForm, FieldType } from "@src/components/autoForm";
-import { Button, Drawer, Modal, Select, Space } from "antd";
+import { Button, Drawer, Space } from "antd";
 import { useSelector } from "react-redux";
-
-const customStyleModal = css`
-  .custom-modal .ant-modal-content {
-    padding: 15px !important; /* Overrides the global padding */
-  }
-`;
 
 interface TypeProps {
   showModal: () => void;
@@ -21,7 +14,6 @@ interface TypeProps {
 }
 
 const DrawerProduct: React.FC<TypeProps> = ({
-  handleOk,
   handleCancel,
   isModalOpen,
   form,

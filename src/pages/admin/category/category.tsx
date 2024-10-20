@@ -5,16 +5,7 @@ import {
   setIsLoadingCategory,
 } from "@src/store/slices/categorySlice";
 import { ICategory } from "@srctypes";
-import {
-  Button,
-  Form,
-  GetProp,
-  Table,
-  Upload,
-  UploadFile,
-  UploadProps,
-  message,
-} from "antd";
+import { Button, Form, Table, UploadFile, message } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,16 +14,6 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { Content } from "antd/es/layout/layout";
 import DrawerCategory from "./drawerCategory";
 import HeaderCategory from "./headerCategory";
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
 
 const CategoryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,30 +70,6 @@ const CategoryPage = () => {
 
     fetchCategory();
   }, [dispatch]);
-
-  const uploadProps: UploadProps = {
-    beforeUpload: (file) => {
-      const isImage = file.type.startsWith("image/");
-      if (!isImage) {
-        message.error("You can only upload image files!");
-      }
-      return isImage || Upload.LIST_IGNORE;
-    },
-    onChange: async ({ fileList }) => {
-      setFileList(fileList);
-
-      if (fileList.length > 0) {
-        const file = fileList[0].originFileObj as FileType;
-        const base64 = await getBase64(file);
-        setPreviewUrl(base64);
-      } else {
-        setPreviewUrl(null);
-      }
-    },
-    maxCount: 1,
-    listType: "picture-card",
-    fileList,
-  };
 
   const handleSubmit = async (value: Record<string, any>) => {
     try {
@@ -235,7 +192,6 @@ const CategoryPage = () => {
         )}
       </Content>
       <DrawerCategory
-        // showModal={showModal}
         handleOk={handleOk}
         handleCancel={handleCancel}
         isModalOpen={isModalOpen}
@@ -243,8 +199,6 @@ const CategoryPage = () => {
         handleSubmit={handleSubmit}
         editCategoryId={editCategoryId}
         previewUrl={previewUrl}
-        // uploadProps={uploadProps}
-        // fileList={fileList}
         setFileList={setFileList}
         setPreviewUrl={setPreviewUrl}
       />
